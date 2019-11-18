@@ -1,26 +1,26 @@
 proj :-
     initial(I),
-    writeln("M C ====> M C"),
+    writeln("M C Moves M C"),
     bfs([[I]], Side),
-    maplist(writeln, Side),nl.
+    maplist(writeln, Side).
 
 % Writing rules for number of missionaries and cannibals. Not more than 2 can travel at a time
 
 safe_state(M, C) :-
 
 % Actual rules    
-    M = 2, C = 0 ;
-    M = 1, C = 0 ;
-    M = 1, C = 1 ;
-    M = 0, C = 2 ;
-    M = 0, C = 1 .
+%    M = 2, C = 0 ;
+%    M = 1, C = 0 ;
+%    M = 1, C = 1 ;
+%    M = 0, C = 2 ;
+%    M = 0, C = 1 .
 
 % Reversing the order of rules
-%    M = 0, C = 2 ;
-%    M = 0, C = 1 ;
-%    M = 2, C = 0 ;
-%    M = 1, C = 1 ;   
-%    M = 1, C = 0 .
+    M = 0, C = 2 ;
+    M = 0, C = 1 ;
+    M = 2, C = 0 ;
+    M = 1, C = 1 ;   
+    M = 1, C = 0 .
 
 % breath-first search algorithm
 bfs(Sides, Side) :-
@@ -35,16 +35,16 @@ bfs1(Sides, Extra) :-
     findall([Q,H|R], (   member([H|R], Sides), move(H, Q), \+ member(Q, R)), Extra), Extra \= [].
 
 %initializing starting condition
-initial((3,3, ====> , 0,0)).
+initial((3,3, east , 0,0)).
 
 %initializing goal condition
-final((0,0, <==== , 3,3)).
+final((0,0, west , 3,3)).
 
 % values of F1 and F2 will be changed according to its direction of moving
-direction(====>, -1, +1, <====).
-direction(<====, +1, -1, ====>).
+direction(east, -1, +1, west).
+direction(west, +1, -1, east).
 
-% apply a *valid* move
+% applying valid move. Possibal Values of MM and CM will come from safe_state.
 move((M1i,C1i, Bi, M2i,C2i), (M1j, C1j, Bj, M2j, C2j)) :-
     direction(Bi, F1, F2, Bj),
     safe_state(MM, CM),
